@@ -1,2 +1,2 @@
-# Dice-Poker
+# Dice Poker
 -- more soon -- 

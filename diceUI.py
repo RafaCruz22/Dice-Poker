@@ -1,26 +1,44 @@
 # User Interface for dicepoker.
-
 class UserInterface:
+
+    #########  Banner for all messages ###########
+    def banner(self, whichBanner, msg):
+
+        if whichBanner == "complete": 
+            print()
+            print(("_" * 66 ).center(60))
+            print()
+            print(msg.center(60))
+            print(("_" * 66 ).center(60))
+            print()
+        
+        if whichBanner == "top":
+            print()
+            print(("_" * 66 ).center(60))
+            print()
+            print(msg.center(60))
+
+        if whichBanner == "bottom":
+            print(msg.center(60))
+            print(("_" * 66 ).center(60))
+            print()
+
+        if whichBanner == "thin":
+            print(("_" * 66 ).center(60))
+            print()
+            print(msg.center(60))
+            print(("_" * 66 ).center(60))
+            print()
+
 
     #########  Prints Intros  ###########
     def printIntro(self, intro):
 
-        # start of round heading
-        if intro == "startRound":
-            print()
-            roundMSG = "Start of Round"
-            roundStyle = "-" * len(roundMSG)
-            print(roundMSG.center(60) + "\n" + roundStyle.center(60))
-
         # intro to game (message to player)
-        elif intro == "start of game":
-            print()
+        if intro == "start of game":
             introMessage = "Welcome to Dice Poker"
-            print(("_" * len(introMessage)).center(60))
-            print()
-            print(introMessage.center(60))
-            print(("_" * len(introMessage)).center(60))
-            print()
+            self.banner("complete", introMessage)
+
             welcomeMSG = (
                 " ***************************************************************"
                 + "\n *                                                             *"
@@ -36,12 +54,16 @@ class UserInterface:
                 + "\n ***************************************************************"
             )
             print(welcomeMSG.center(60))
+
             print()
             start = "Start of Game"
-            print(("_" * len(start)).center(60))
-            print()
-            print(start.center(60))
-            print(("_" * len(start)).center(60))
+            self.banner("top", start)
+
+        # start of round heading
+        if intro == "startRound":
+            roundMSG = "Start of Round"
+            self.banner("bottom", roundMSG)
+
 
     def otherMSG(self, whichMSG):
 
@@ -73,7 +95,8 @@ class UserInterface:
                 + "\n    *    dice you want enhanced with spaces in-between       *"
                 + "\n    *               each number (1 - 5).                     *"
                 + "\n    *                                                        *"
-                + "\n    *               Example: 1 2 3 4 5                       *"
+                + "\n    *               Example: 5 4                             *"
+                + "\n    *    The above example will enhance dice 4 & 5           *"
                 + "\n    *                                                        *"
                 + "\n    **********************************************************"
             )
@@ -90,12 +113,9 @@ class UserInterface:
 
         # final hand - banner
         elif whichMSG == "final hand":
+            rolledMSG = " ** Final Hand ** "
+            self.banner("top", rolledMSG)
             print()
-            rolledMSG = " * Final Hand * "
-            line = "-" * len(rolledMSG)
-            print(line.center(60))
-            print(rolledMSG.center(60))
-            print(line.center(60))
 
         # your broke message
         elif whichMSG == "broke":
@@ -110,19 +130,14 @@ class UserInterface:
 
         # prints - start of game amount
         if time == "start amount":
-            startAmount = "Start Amount : ${}".format(money)
-            print()
-            print(("-" * len(startAmount)).center(60))
-            print(startAmount.center(60))
-            print(("-" * len(startAmount)).center(60))
+            startAmount = "Start Amount: ${}".format(money)
+            self.banner("bottom", startAmount)
 
         # prints - current funds banner
         elif time == "current amount":
             currentAmount = "Current Amount: ${}".format(money)
             print()
-            print(("-" * len(currentAmount)).center(60))
-            print(currentAmount.center(60))
-            print(("-" * len(currentAmount)).center(60))
+            self.banner("top", currentAmount)
 
         # prints - winning
         elif time == "won":
@@ -130,21 +145,18 @@ class UserInterface:
 
         # prints - end of round winnings
         elif time == "end round":
-            print()
-            print(("End of round!").center(60))
-            print((" End of round amount: ${}".format(money).center(60)))
+            endRound = "End of round!"
+            endAmount = " End of round amount: ${}".format(money).center(60)
+            self.banner("top", endRound)
+            self.banner("bottom", endAmount)
 
         # prints - final amount
         elif time == "final amount":
             print()
             finalAmount = "Final Amount: ${}".format(money)
             thanks = "Thanks for playing"
-            print(("_" * len(thanks)).center(60))
-            print()
-            print(finalAmount.center(60))
-            print()
-            print(thanks.center(60))
-            print(("_" * len(thanks)).center(60))
+            self.banner("top", finalAmount)
+            self.banner("bottom", thanks)
 
     #########  Prints Dice ############
     def displayDice(self, dice, hand):
@@ -161,57 +173,26 @@ class UserInterface:
             print(newHand.center(60))
 
     #########  new round?  ############
-    def newRoundQuestion(self):
-
+    def userInput(self, whichUserMSG):
         # Returns True to keep playing, False to stop
         response = (
-            input("\n" + " " * 8 + "Do you want to play a round (Yes or No): ")
+            input("\n" + " " * 8 + f"--> Do you want to {whichUserMSG}? (Yes or No): ")
             .lower()
             .strip()
         )
 
         while True:
-            if response == "yes":
+            if response.lower() == "yes" or response.lower() == "y":
                 return True
 
-            elif response == "no":
+            elif response.lower() == "no" or response.lower() == "n":
                 return False
 
             else:
                 print("Invalid Entry!".center(60))
                 response = (
                     input("\n" + " " * 8 +
-                          "Do you want to play a round (Yes or No): ")
-                    .lower()
-                    .strip()
-                )
-
-    #########  reroll?  ############
-    def enhanceQuestion(self):
-
-        # Returns True to keep playing, False to stop
-        response = (
-            input("\n" + " " * 8 + "Do you want to enhance your roll? (Yes or No): ")
-            .lower()
-            .strip()
-        )
-        # error checking - enhance question
-        while True:
-
-            if response == "yes":
-                return True
-
-            elif response == "no":
-                return False
-
-            else:
-                print("Invalid Entry!".center(60))
-                response = (
-                    input(
-                        "\n"
-                        + " " * 8
-                        + "Do you want to enhance your roll? (Yes or No): "
-                    )
+                          "--> Do you want to {whichUserMSG} (Yes or No): ")
                     .lower()
                     .strip()
                 )
@@ -221,7 +202,7 @@ class UserInterface:
 
         # message to player
         position = input(
-            " " * 10 + "Which dice do you want to enhance? : ").strip()
+            " " * 10 + "--> Which dice do you want to enhance? : ").strip()
 
         while True:
             userInput = "valid"
@@ -243,33 +224,6 @@ class UserInterface:
 
             print()
             position = input(
-                " " * 10 + "Which dice do you want to enhance? : ").strip()
+                " " * 10 + "--> Which dice do you want to enhance? : ").strip()
 
         return position
-
-    ######## new game? #############
-    def newGameQuestion(self):
-
-        # Returns turn to play again, false to stop
-        response = (
-            input("\n" + " " * 8 + "Do you want to play a new game? (Yes or No): ")
-            .lower()
-            .strip()
-        )
-        while True:
-            if response == "yes":
-                return True
-
-            elif response == "no":
-                return False
-
-            else:
-                print("Invalid Entry!".center(60))
-                response = (
-                    input(
-                        "\n" + " " * 8 +
-                        "Do you want to play a new game? (Yes or No): "
-                    )
-                    .lower()
-                    .strip()
-                )

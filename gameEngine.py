@@ -45,7 +45,7 @@ class DicePoker():
         for reRolls in range(1, 3):
 
             # ask user if they want to enhance
-            enhance = self.UI.enhanceQuestion()
+            enhance = self.UI.userInput("ehance roll")
 
             # if player wants to roll, then ask for position
             if enhance == True:
@@ -88,16 +88,8 @@ class DicePoker():
                     score = self.dice.score()[1]
                     self.money += score
 
-                    # print the final hand rolled
-                    self.UI.otherMSG("final hand")
-                    hand = str(self.dice.getState())
-                    print(hand.center(60))
-
-                    # print the hand name
-                    print((self.dice.score()[0]).center(60).title())
-
-                    # displays winnings
-                    self.UI.displayMoney(self.dice.score()[1], time="won")
+                    # process the hand and prints proper output
+                    self.processHand()
 
                     # prints end of round amount to screen
                     self.UI.displayMoney(self.money, time="end round")
@@ -105,15 +97,9 @@ class DicePoker():
             # handles player not wanting to roll either reroll
             elif enhance == False or reRolls == 2:
                 if reRolls == 2:
-
-                    # print final hand rolled
-                    self.UI.otherMSG("final hand")
-                    hand = str(self.dice.getState())
-                    print(hand.center(60))
-                    print((self.dice.score()[0]).center(60).title())
-
-                    # displays winnings
-                    self.UI.displayMoney(self.dice.score()[1], time="won")
+                    
+                    # process the hand and prints proper output
+                    self.processHand()
 
                     # take care of winnings here
                     score = self.dice.score()[1]
@@ -124,6 +110,20 @@ class DicePoker():
 
                 else:
                     continue
+
+    def processHand(self): 
+        # print the final hand rolled
+        self.UI.otherMSG("final hand")
+        hand = str(self.dice.getState())
+        print(hand.center(60))
+        print()
+
+        # print the hand name
+        print((self.dice.score()[0]).center(60).title())
+
+        # displays winnings
+        self.UI.displayMoney(self.dice.score()[1], time="won")
+        
 
     ######## Starts Game ########
     def playGame(self):
@@ -138,7 +138,7 @@ class DicePoker():
 
             # Checks for invalid inputs and
             # starts game if player wants to play
-            round = self.UI.newRoundQuestion()
+            round = self.UI.userInput("play a round") 
             while True:
 
                 if round == False:
@@ -146,7 +146,7 @@ class DicePoker():
                     return False
 
                 elif round == True:
-                    # only allows round if play has min $10
+                    # only allows round if player has min $10
                     if self.money >= self.costToPlay:
                         self.playRound()
                     break
@@ -159,7 +159,7 @@ class DicePoker():
 
                 # asks player if they want to play
                 # a new
-                response = self.UI.newGameQuestion()
+                response = self.UI.userInput("start a new game")
                 while True:
 
                     if response == True:
